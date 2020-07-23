@@ -54,3 +54,10 @@ git checkout c1
 >
 >HEAD -> C1
 
+### 6、问题
+
+>  当push时 会报错`failed to push some refs to git地址`
+
+**可以通过如下命令进行代码合并【注：pull=fetch+merge]**
+
+`git pull --rebase origin master`
