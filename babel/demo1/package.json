@@ -1,0 +1,14 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.10.4"
+  }
+}

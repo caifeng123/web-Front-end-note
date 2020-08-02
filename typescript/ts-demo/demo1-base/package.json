@@ -1,0 +1,9 @@
+{
+  "name": "demo1-base",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build":"tsc index.ts && node ./index.js"
+  }
+}
