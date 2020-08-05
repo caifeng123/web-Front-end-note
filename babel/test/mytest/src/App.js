@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import {TextLine} from '@baidu/one-ui-pro';
+import '@baidu/one-ui-pro/lib/index.css';
 
 class FirstDemo extends PureComponent {
     render() {
