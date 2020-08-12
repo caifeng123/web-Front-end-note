@@ -491,6 +491,4 @@ yarn add @babel/preset-react --dev
 }
 ```
 
->可提取css文件法
-
-上面已经出现 请按住ctrl [点击查看](#css)
+>可提取css文件法 [点击查看](#css)
