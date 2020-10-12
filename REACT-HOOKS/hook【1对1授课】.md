@@ -306,16 +306,43 @@ function Timer() {
 
 > 有时我们会需要让子组件的方法 给父组件调用。那该如何是好呀，记不记得ref 他不是能存吗 把它丢出去不就行啦。
 
+看看使用场景！
+
+![image-20200812115039828](https://s1.ax1x.com/2020/08/12/ajInat.png)
+
 ```jsx
-function FancyInput(props, ref) {
-  const inputRef = useRef();
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      inputRef.current.focus();
+ //父组件
+ const childRef = useRef();
+
+  const onscroll = (e) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget
+    if (scrollHeight - scrollTop - clientHeight < 1) {
+      childRef.current.setPageindex(x => x + 1);
     }
+  }
+  const HotCompanyImg = HotCompanyImgs[0]
+  return (
+    <div className="myscroll" onScroll={onscroll} >
+      <MySwiper imgs={IndexBannerImgs} />
+      {
+        HotCompanyImg && <img src={require(`../../assets/imgs/hotcompany/${HotCompanyImg}`)}
+          alt={HotCompanyImg} onClick={() => history.push('hotcompany')} />
+      }
+      <Joblist history={history} title="职位招聘" cRef={childRef} showSelector={true}/>
+    </div>
+  )
+
+
+//子组件
+import React, { useImperativeHandle } from 'react'
+
+const Joblist = ({cRef}) => {
+  useImperativeHandle(cRef, () => ({
+    setPageindex :setPageindex
   }));
-  return <input ref={inputRef} ... />;
-}
-FancyInput = forwardRef(FancyInput);
+  render(){
+  	...
+  }
+} 
 ```
 
