@@ -58,7 +58,7 @@
   =============================================
   //需要异步请求【要中间件】
   //store.js
-  import {createStore,applyMiddleware} from 'redux'
+  import { createStore, applyMiddleware} from 'redux'
   import thunk from 'redux-thunk'
   import reducers from './reducers'
   

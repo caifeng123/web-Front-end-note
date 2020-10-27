@@ -1,11 +1,21 @@
-// import {combineReducers} from 'redux'
+
+
+import {reducer1} from reducer1.js
+import {reducer2} from reducer1.js
+import {reducer3} from reducer1.js
+
+export default {
+  reducer1,
+  reducer2,
+  reducer3
+}
 
 const init = {
   num:1,
   who:'0',
   go:true
 }
-export default function(state = init,action){
+export const reducer1 = function(state = init,action){
   switch(action.type){
     case 'increase':
       const {num,who} = state

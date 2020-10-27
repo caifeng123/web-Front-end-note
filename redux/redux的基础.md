@@ -8,7 +8,7 @@
 
 ### redux流程示意图
 
-![redux](/Users/caifeng01/Desktop/codes/笔记/web-Front-end-note/redux/imgs/redux.jpg)
+![redux](https://s1.ax1x.com/2020/10/13/0hcJr6.png)
 
 
 
@@ -29,7 +29,7 @@
   )(TodoList)
   ```
 
-  - `mapStateToProps`：从Redux状态树中提取需要的部分作为props传递给当前的组件。
+  - `mapStateToProps`：从Redu8x状态树中提取需要的部分作为props传递给当前的组件。
   - `mapDispatchToProps`：将需要绑定的响应事件（action）作为props传递到组件上。
 
 **实际上 只需要在子组建中获取 对应参数与数据即可！！**

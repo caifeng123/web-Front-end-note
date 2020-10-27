@@ -1,0 +1,47 @@
+<!--
+ * @Author: cc123nice
+ * @Date: 2020-10-13 09:48:50
+ * @LastEditTime: 2020-10-13 19:05:06
+ * @Description: my progamme description
+ * @FilePath: \web-Front-end-note\面试题\手写ajax&axios\ajax.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET','https://www.easy-mock.com/mock/5d298f4e1606441867ef38a3/example/stu-tea',true)
+    
+    xhr.send()
+
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState == 4 && xhr.status == 200){
+         console.log(JSON.parse(xhr.responseText))
+      }
+    }
+
+    const axios = ({type,url}) => {
+      let xhr = new XMLHttpRequest()
+      return new Promise((resolve,reject)=>{
+        xhr.open(type,url,true)
+        xhr.onload = () =>{
+          resolve(xhr.responseText)
+        }
+        xhr.onerror = () =>{
+          reject()
+        }
+        xhr.send()
+      })
+    }
+    axios({type:'GET',url:'https://www.easy-mock.com/mock/5d298f4e1606441867ef38a3/example/stu-tea'}).then(res=>{
+      console.log(res)
+    })
+
+  </script>
+</body>
+</html>
