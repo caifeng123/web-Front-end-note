@@ -29,7 +29,7 @@
   )(TodoList)
   ```
 
-  - `mapStateToProps`：从Redu8x状态树中提取需要的部分作为props传递给当前的组件。
+  - `mapStateToProps`：从Redux状态树中提取需要的部分作为props传递给当前的组件。
   - `mapDispatchToProps`：将需要绑定的响应事件（action）作为props传递到组件上。
 
 **实际上 只需要在子组建中获取 对应参数与数据即可！！**
