@@ -1,3 +1,13 @@
+> facebook 的全局状态管理，相对于常用的全局状态管理redux/mobx有可用的地方
+>
+> 虽说都是hook，但上手+学习成本有点高
+>
+> 用作实践笔记和总结，踩了坑给大家一起分享
+
+### 0、安装
+
+Npm 即可
+
 ### 1、最外侧RecoilRoot
 
 ```js
@@ -12,77 +22,21 @@ function AppRoot() {
 }
 ```
 
-
 ### 2、常见钩子
 
-#### - useRecoilState
+- useRecoilState
 
 > 用于读写
 
-```js
- const [tempF, setTempF] = useRecoilState(tempFahrenheit);
-```
-
-#### - useRecoilValue
+- useRecoilValue
 
 > 用于读 [atom|selector]
 
-```js
-const namesState = atom({
-  key: 'namesState',
-  default: ['', 'Ella', 'Chris', '', 'Paul'],
-});
-
-const filteredNamesState = selector({
-  key: 'filteredNamesState',
-  get: ({get}) => get(namesState).filter((str) => str !== ''),
-});
-
-function NameDisplay() {
-  const names = useRecoilValue(namesState);
-  const filteredNames = useRecoilValue(filteredNamesState);
-
-  return (
-    <>
-      Original names: {names.join(',')}
-      <br />
-      Filtered names: {filteredNames.join(',')}
-    </>
-  );
-}
-```
-
-#### - useSetRecoilState
+- useSetRecoilState
 
 > 仅用作设置
 
-```js
-import {atom, useSetRecoilState} from 'recoil';
-
-const namesState = atom({
-  key: 'namesState',
-  default: ['Ella', 'Chris', 'Paul'],
-});
-
-function FormContent({setNamesState}) {
-  const [name, setName] = useState('');
-  
-  return (
-    <>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      <button onClick={() => setNamesState(names => [...names, name])}>Add Name</button>
-    </>
-)}
-
-// This component will be rendered once when mounting
-function Form() {
-  const setNamesState = useSetRecoilState(namesState);
-  
-  return <FormContent setNamesState={setNamesState} />;
-}
-```
-
-#### - useRecoilCallback
+- useRecoilCallback
 
 > 只读不订阅 数据变化也不会导致当前组件重渲染。
 
@@ -108,7 +62,7 @@ function CartInfoDebug() {
 }
 ```
 
-#### - selector
+- selector
 
 > 主要注意的是，selector 可能会被重复执行多次，所以其结果会被缓存，它应该是一个纯函数，相同的输入参数和依赖项，其得到的值应该是一样的。
 >
@@ -167,3 +121,94 @@ function TempCelsius() {
 }
 ```
 
+### 3、总结一下
+
+#### - 与redux差别
+
+- 经常在开发时redux对象很深，一但调用一个修改的action 就会重新生成新的state，导致不少其他也在state的里的模块会被重新渲染
+
+```js
+function reducerTest(state = initialState, action) {
+  switch (action.type) {
+    case 'ADD':
+      const {info} = state
+      const newInfo = {
+      	...info,
+        age: info.age+1
+      }
+      return { ...state,info:newInfo }
+    default:
+      return state
+}}
+```
+
+- recoil会将粒度化的很细，当一个被改时 并不会造成其他变动，因为每个都是atom
+
+```js
+export const projectInfo = atom({key:'1',default:{}})
+
+export const projectChangeLog = atom({key:'1',default:[]})
+
+export const projectName = atom({key:'1',default:''})
+```
+
+
+
+#### - atom是异步！！！
+
+#### - atom&atomfamily
+
+> 开始不是很能理解这俩，看上去atomfamily是atom的集合？那为什么不用对象/map映射呢？
+
+```js
+// 对象映射
+export const mock = {
+	"1":atom({key:'1',default:''}),
+  "2":atom({key:'2',default:''}),
+}
+// atomfamily
+export const family = atomfamily({
+  key:'family',
+  default: (xx)=>xx+'haha'	// 返回字符串会自动包装为一个atom对象
+})
+```
+
+> 通过实际研究下来 找到了不同的应用场景
+
+-  通过对象映射:能做缓存+同步调用+增删数据（修改对象即可）
+
+```js
+/*
+** 增+查
+** 利用对象缓存所有atom，也可用map
+*/
+export const getAtomById = (id) => {
+	if(!mock[id]){
+  	mock[id] = atom({
+      key: 'id',
+      default: ''
+    })
+  }
+  return mock[id]
+}
+/* 
+** 改
+** 通过useSetRecoilState(atom)获取到修改函数
+** 调用函数即可类似useState的hook
+*/
+useSetRecoilState(getAtomById(id))(oldValue=>oldValue+'xxx')
+```
+
+- atomfamily:规范化+在组件/自定义hook中通过api调用
+
+```js
+import {family} from './store/xxx.js'
+// family是上个代码段定义的atomfamily 传入id获取对应atom
+const myAtom = family(id)
+// 在进行其他操作
+const [nowAtom,setNowAtom] = useRecoilState(myAtom)
+```
+
+
+
+#### 
